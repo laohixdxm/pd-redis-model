@@ -1,6 +1,6 @@
 {
   "name": "pd-redis-model",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "To facilitate database operation in Redis",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,6 @@
   "dependencies": {
     "pd-redis-base-record": "^0.1.5",
     "pd-redis-parentize": "^0.1.7",
-    "pd-redis-set-uniques": "^0.1.2"
+    "pd-redis-set-uniques": "^0.1.3"
   }
 }
