@@ -8,6 +8,7 @@ var inputRequired = require('pd-model-input-required');
 module.exports = function (modelName, cli) {
     var core = base(modelName, cli);
     inputRequired(core);
+    setUniques(core);
     core.setUniques = function (uSetting) {
         setUniques(core, uSetting);
         return core;
