@@ -28,6 +28,6 @@
     "pd-model-input-required": "^0.1.1",
     "pd-redis-base-record": "^0.1.5",
     "pd-redis-parentize": "^0.1.7",
-    "pd-redis-set-uniques": "^0.1.4"
+    "pd-redis-set-uniques": "^0.1.3"
   }
 }
