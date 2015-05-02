@@ -9,10 +9,6 @@ module.exports = function (modelName, cli) {
     var core = base(modelName, cli);
     inputRequired(core);
     setUniques(core);
-    core.setUniques = function (uSetting) {
-        setUniques(core, uSetting);
-        return core;
-    };
     core.mother = function (Child) {
         parentize(core, Child);
         return core;

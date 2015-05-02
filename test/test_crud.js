@@ -2,7 +2,7 @@
 var q = require('q');
 var announcer = require('pd-api-announcer');
 var anno = require('pd-api-test-anno')();
-var eReport = require('./report-error');
+var eReport = require('pd-test-report-error');
 var expect = require('chai').expect;
 var assert = require('chai').assert;
 
@@ -10,17 +10,11 @@ var modelMaker = require('../');
 var Merchants = modelMaker('merchant');
 var Owners = modelMaker('owner');
 var Patrons = modelMaker('patron');
-Merchants.setUniques({
-    'name': ['name']
-});
 
-Owners.setUniques({
-    'reg-name': ['reg-name']
-});
+Merchants.setUniqueDef('name', ['name']);
+Owners.setUniqueDef('reg-name', ['reg-name']);
+Patrons.setUniqueDef('pno', ['pno']);
 
-Patrons.setUniques({
-    'pno': ['pno']
-});
 Patrons.needInputOf('nick');
 Patrons.eachInputOf('nick').mustMatch(/^\w{6}$/);
 
@@ -37,6 +31,9 @@ describe('Redis-model', function () {
             return Owners.create({
                 name: 'johndoe',
                 'reg-name': 'johndoe'
+            }, function (multis) {
+                console.log(multis);
+                return multis;
             }).then(function (sid) {
                 ownersToDelete.push(sid);
                 console.log('created owner with sid:' + sid);
@@ -81,12 +78,24 @@ describe('Redis-model', function () {
 
     it('should not allow creating record with invalid constraints', function (done) {
         anno.tcase(function () {
-            return Owners.create({
-                name: 'charlie',
-                'reg-name': 'johndoe'
+            return Owners.amount().then(function (amount) {
+                expect(amount).to.equal(1);
+                return Owners.create({
+                    name: 'charlie',
+                    'reg-name': 'johndoe'
+                }, function (multi) {
+                    console.log(multi);
+                    return multi;
+                });
+            }).then(function () {
+                eReport('missed duplicate reg-name!');
             }).fail(function (err) {
                 assert(announcer.isClientErrorFor(err, 'reg-name', 'taken'), 'not-taken-error');
                 console.log('caught uniqueness conflict');
+                return Owners.amount();
+            }).then(function (amount) {
+                expect(amount).to.equal(1);
+                console.log('Owner did not increase by mistake..');
             }).fail(function (err) {
                 eReport(err);
             });
@@ -144,7 +153,9 @@ describe('Redis-model', function () {
             }).then(function () {
                 var clearPromises = [];
                 [Merchants, Owners, Patrons].forEach(function (model) {
-                    clearPromises.push(model.clearSidCounter());
+                    clearPromises.push(model.clearSidCounter().fail(function (err) {
+                        eReport(err);
+                    }));
                 });
                 return q.allSettled(clearPromises);
             });
