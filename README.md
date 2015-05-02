@@ -60,6 +60,9 @@ listPromise.then(function(list){
 });
 ```
 
+### More about CRUD
+For more details, check [Base Record](https://github.com/pandazy/pd-redis-base-record)
+
 
 ### Set model fields
 [Set unique fields](https://github.com/pandazy/pd-redis-set-uniques)
