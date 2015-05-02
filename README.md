@@ -59,6 +59,13 @@ listPromise.then(function(list){
    // ]
 });
 ```
+##### To get total amount of a model
+```javascript
+var amountPromise = User.amount();
+amountPromise.then(function(amount){
+  // amount ==> 1
+});
+```
 #### To update:
 ```javascript
 var profile = {
@@ -87,9 +94,32 @@ var readPromise = User.withUnique('account-name').findBy('myhost@email.com');
 check [Set unique fields](https://github.com/pandazy/pd-redis-set-uniques) for more details
 
 #### Set non-empty fields
+```javascript
+User.needInputOf(['email', 'password'])
+User.eachInputOf('email').mustMatch(function(val){
+   return require('validator').isEmail(val);
+})
+User.eachInputOf('password').mustMatch(/^\w{6,30}$/);
+```
 check [Set non-empty fields](https://github.com/pandazy/pd-model-input-required) for more details
 
 ### Set relationship
+```javascript
+var Posts = require('pd-redis-model')('post');
+User.mother(Posts);
+var userSid = '1';
+var postProfile = {
+   content : 'Hello'
+};
+User.PostOwner(userSid).bear(postProfile);
+var postSid = '12';
+User.PostOwner(userSid).hasKid(postSid);
+User.PostOwner(userSid).findKids({
+  latest: (new Date()).getTime(),
+  earliest: 0
+});
+Posts.UserKid(postSid).getParent();
+```
 check [Set parenthood](https://github.com/pandazy/pd-redis-parentize) for more details
 
 
