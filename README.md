@@ -59,12 +59,37 @@ listPromise.then(function(list){
    // ]
 });
 ```
+#### To update:
+```javascript
+var profile = {
+  'pd-sid' : 1
+  password : '123abc', 
+  status : 'online'
+};
+var updatePromise = User.modify(profile);
+```
+The 'pd-sid' which is the auto-increase id field can never be updated but it should be assigned value to specify which record is to be updated.
+#### To remove:
+```javascript
+var removePromise = User.remove('1') //'1' is the user record's sid
+```
 
 ### More about CRUD
 For more details, check [Base Record](https://github.com/pandazy/pd-redis-base-record)
 
 
 ### Set model fields
-[Set unique fields](https://github.com/pandazy/pd-redis-set-uniques)
+#### Set unique fields
+```javascript
+User.setUniqueDef('account-name', ['email']);
+var readPromise = User.withUnique('account-name').findBy('myhost@email.com');
+```
+check [Set unique fields](https://github.com/pandazy/pd-redis-set-uniques) for more details
+
+#### Set non-empty fields
+check [Set non-empty fields](https://github.com/pandazy/pd-model-input-required) for more details
+
+### Set relationship
+check [Set parenthood](https://github.com/pandazy/pd-redis-parentize) for more details
 
 
