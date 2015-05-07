@@ -1,6 +1,6 @@
 {
   "name": "pd-redis-model",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "To facilitate database operation in Redis",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "homepage": "https://github.com/pandazy/pd-redis-model#readme",
   "dependencies": {
     "pd-model-input-required": "^0.1.1",
-    "pd-redis-base-record": "^0.1.5",
+    "pd-redis-base-record": "^0.1.6",
     "pd-redis-parentize": "^0.1.7",
     "pd-redis-set-uniques": "^0.1.3"
   }
