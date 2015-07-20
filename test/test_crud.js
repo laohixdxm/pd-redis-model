@@ -4,7 +4,6 @@ var announcer = require('pd-api-announcer');
 var anno = require('pd-api-test-anno')();
 var eReport = require('pd-test-report-error');
 var expect = require('chai').expect;
-var assert = require('chai').assert;
 
 var modelMaker = require('../');
 var Merchants = modelMaker('merchant');
@@ -50,7 +49,7 @@ describe('Redis-model', function () {
             }).then(function () {
                 eReport('missed empty nick!');
             }).fail(function (err) {
-                assert(announcer.isClientErrorFor(err, 'nick', 'empty'), 'not-nick-empty');
+                announcer.assertReqErrorFor(err, 'nick', 'empty');
                 console.log('Caught empty nick..');
                 return Patrons.create({
                     pno: 'sc-1234',
@@ -59,7 +58,7 @@ describe('Redis-model', function () {
             }).then(function () {
                 eReport('missed wrongly formatted nick');
             }).fail(function (err) {
-                assert(announcer.isClientErrorFor(err, 'nick', 'format'), 'not-nick-format');
+                announcer.assertReqErrorFor(err, 'nick', 'format');
                 console.log('Caught wrongly formatted nick..');
                 return Patrons.create({
                     name: 'janedoe',
@@ -90,7 +89,7 @@ describe('Redis-model', function () {
             }).then(function () {
                 eReport('missed duplicate reg-name!');
             }).fail(function (err) {
-                assert(announcer.isClientErrorFor(err, 'reg-name', 'taken'), 'not-taken-error');
+                announcer.assertReqErrorFor(err, 'reg-name', 'taken');
                 console.log('caught uniqueness conflict');
                 return Owners.amount();
             }).then(function (amount) {
